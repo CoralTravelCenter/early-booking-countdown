@@ -44,6 +44,7 @@ ASAP ->
                 momentX: moment().add({ d: 2 })
                 labels: yes
                 overMessage: ''
+                updateHighestRank: () ->
 
             constructor: (el, options) ->
                 @options = $.extend({}, @defaults, options)
@@ -100,6 +101,9 @@ ASAP ->
                     units = $units.attr('data-units')
                     value = Number($units.attr('data-value'))
                     value2set = remains[units]()
+                    try
+                        @options.updateHighestRank units: units, value: value2set if value2set != 0 and not hit_non_zero_rank
+                    catch ex
                     hit_non_zero_rank ||= value2set != 0
                     $units.addClass 'insignificant' unless hit_non_zero_rank
                     if value2set != value
@@ -150,7 +154,15 @@ ASAP ->
 ASAP ->
     $('#home-countdown').slideDown ->
         window.$countdown = $('.countdown-widget').Flipdown
-            momentX: moment('2023-02-04T20:59:59Z')
+            momentX: moment('2023-02-28T20:59:59Z')
+            updateHighestRank: (data) ->
+                $('.highest-rank-count').text data.value
+                $('.highest-rank-wording').text data.value[{
+                    days: 'asDays',
+                    hours: 'asHours',
+                    minutes: 'asMinutes',
+                    seconds: 'asSeconds'
+                }[data.units]]()
         $countdown.on 'time-is-up', ->
             $countdown.closest('.widgetcontainer').slideUp()
         .Flipdown('start')

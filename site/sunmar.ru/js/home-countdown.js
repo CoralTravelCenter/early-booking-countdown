@@ -79,7 +79,8 @@ ASAP(function() {
           d: 2
         }),
         labels: true,
-        overMessage: ''
+        overMessage: '',
+        updateHighestRank: function() {}
       };
 
       function Flipdown(el, options) {
@@ -177,11 +178,21 @@ ASAP(function() {
         promise = $.Deferred();
         this.$el.find('[data-units]').each((function(_this) {
           return function(idx, el) {
-            var $stacks, $units, digits2set, units, value, value2set;
+            var $stacks, $units, digits2set, ex, units, value, value2set;
             $units = $(el);
             units = $units.attr('data-units');
             value = Number($units.attr('data-value'));
             value2set = remains[units]();
+            try {
+              if (value2set !== 0 && !hit_non_zero_rank) {
+                _this.options.updateHighestRank({
+                  units: units,
+                  value: value2set
+                });
+              }
+            } catch (error) {
+              ex = error;
+            }
             hit_non_zero_rank || (hit_non_zero_rank = value2set !== 0);
             if (!hit_non_zero_rank) {
               $units.addClass('insignificant');
@@ -260,7 +271,16 @@ ASAP(function() {
 ASAP(function() {
   return $('#home-countdown').slideDown(function() {
     window.$countdown = $('.countdown-widget').Flipdown({
-      momentX: moment('2023-02-04T20:59:59Z')
+      momentX: moment('2023-02-28T20:59:59Z'),
+      updateHighestRank: function(data) {
+        $('.highest-rank-count').text(data.value);
+        return $('.highest-rank-wording').text(data.value[{
+          days: 'asDays',
+          hours: 'asHours',
+          minutes: 'asMinutes',
+          seconds: 'asSeconds'
+        }[data.units]]());
+      }
     });
     return $countdown.on('time-is-up', function() {
       return $countdown.closest('.widgetcontainer').slideUp();
