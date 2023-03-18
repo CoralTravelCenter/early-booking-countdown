@@ -153,8 +153,11 @@ ASAP ->
 
 ASAP ->
     $('#home-countdown').slideDown ->
-        window.$countdown = $('.countdown-widget').Flipdown
-            momentX: moment('2023-02-28T20:59:59Z')
+        $('.countdown-widget')
+        .on 'time-is-up', ->
+            $(this).closest('.widgetcontainer').slideUp()
+        .Flipdown
+            momentX: moment('2023-03-31T20:59:59Z')
             updateHighestRank: (data) ->
                 $('.highest-rank-count').text data.value
                 $('.highest-rank-wording').text data.value[{
@@ -163,6 +166,4 @@ ASAP ->
                     minutes: 'asMinutes',
                     seconds: 'asSeconds'
                 }[data.units]]()
-        $countdown.on 'time-is-up', ->
-            $countdown.closest('.widgetcontainer').slideUp()
-        .Flipdown('start')
+        .Flipdown 'start'

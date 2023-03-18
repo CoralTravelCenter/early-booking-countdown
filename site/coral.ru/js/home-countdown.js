@@ -270,8 +270,10 @@ ASAP(function() {
 
 ASAP(function() {
   return $('#home-countdown').slideDown(function() {
-    window.$countdown = $('.countdown-widget').Flipdown({
-      momentX: moment('2023-02-28T20:59:59Z'),
+    return $('.countdown-widget').on('time-is-up', function() {
+      return $(this).closest('.widgetcontainer').slideUp();
+    }).Flipdown({
+      momentX: moment('2023-03-31T20:59:59Z'),
       updateHighestRank: function(data) {
         $('.highest-rank-count').text(data.value);
         return $('.highest-rank-wording').text(data.value[{
@@ -281,9 +283,6 @@ ASAP(function() {
           seconds: 'asSeconds'
         }[data.units]]());
       }
-    });
-    return $countdown.on('time-is-up', function() {
-      return $countdown.closest('.widgetcontainer').slideUp();
     }).Flipdown('start');
   });
 });
