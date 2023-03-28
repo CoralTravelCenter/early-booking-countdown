@@ -155,7 +155,7 @@ ASAP ->
     $('#home-countdown').slideDown ->
         $('.countdown-widget')
         .on 'time-is-up', ->
-            $(this).closest('.widgetcontainer').slideUp()
+            $(this).closest('#home-countdown').slideUp()
         .Flipdown
             momentX: moment('2023-03-31T20:59:59Z')
             updateHighestRank: (data) ->

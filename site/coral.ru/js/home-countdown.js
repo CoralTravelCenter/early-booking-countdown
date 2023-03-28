@@ -271,7 +271,7 @@ ASAP(function() {
 ASAP(function() {
   return $('#home-countdown').slideDown(function() {
     return $('.countdown-widget').on('time-is-up', function() {
-      return $(this).closest('.widgetcontainer').slideUp();
+      return $(this).closest('#home-countdown').slideUp();
     }).Flipdown({
       momentX: moment('2023-03-31T20:59:59Z'),
       updateHighestRank: function(data) {
